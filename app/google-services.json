@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "749661840276",
+    "firebase_url": "https://dabble-92be8.firebaseio.com",
+    "project_id": "dabble-92be8",
+    "storage_bucket": "dabble-92be8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:749661840276:android:f1d04c1d77e78107",
+        "android_client_info": {
+          "package_name": "com.dabble.dabble"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "749661840276-8jud27lvkj46a04q8ii44pij9iamqpgc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dabble.dabble",
+            "certificate_hash": "f8b91fe132dbdf858df546137287445f36a01ff3"
+          }
+        },
+        {
+          "client_id": "749661840276-7r357nvauldmke0nng3151o3j30kir6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgjMT6oel_-GUVrwA-z1VmjBEyEg6sUc0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "749661840276-7r357nvauldmke0nng3151o3j30kir6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

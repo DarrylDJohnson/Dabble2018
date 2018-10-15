@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#40C4FF</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="gray50">#ECEFF1</color>
+    <color name="gray100">#CFD8DC</color>
+    <color name="gray200">#B0BEC5</color>
+    <color name="gray300">#90A4AE</color>
+    <color name="gray400">#78909C</color>
+    <color name="gray500">#607D8B</color>
+    <color name="gray600">#546E7A</color>
+    <color name="gray700">#455A64</color>
+    <color name="gray800">#37474F</color>
+    <color name="gray900">#263238</color>
+
+    <color name="transparent_white">#AAFFFFFF</color>
+    <color name="transparent_gray50">#AAECEFF1</color>
+    <color name="transparent_gray100">#AACFD8DC</color>
+    <color name="transparent_gray200">#AAB0BEC5</color>
+    <color name="transparent_gray300">#AA90A4AE</color>
+    <color name="transparent_gray400">#AA78909C</color>
+    <color name="transparent_gray500">#AA607D8B</color>
+    <color name="transparent_gray600">#AA546E7A</color>
+    <color name="transparent_gray700">#AA455A64</color>
+    <color name="transparent_gray800">#AA37474F</color>
+    <color name="transparent_gray900">#AA263238</color>
+
+    <color name="bar_bg">#FFFFFF</color>
+    <color name="selector_bottom_navigation">@color/transparent_gray300</color>
+
+    <color name="toolbar_selected">@color/gray600</color>
+    <color name="toolbar_unselected">@color/gray100</color>
+
+    <color name="scrim">#99323232</color>
+
+    <color name="accentLight">#DCEDC8</color>
+    <color name="accentMedium">#AED581</color>
+    <color name="accentMediumShadow">#93BF69</color>
+    <color name="accentDark">#4CAF50</color>
+
+</resources>
