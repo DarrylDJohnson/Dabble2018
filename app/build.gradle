@@ -55,7 +55,8 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:2.0.2'
 
     /** Other Libraries **/
-    implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.1'
+    implementation 'com.yarolegovich:discrete-scrollview:1.4.9'
+    implementation 'com.github.ittianyu:BottomNavigationViewEx:2.0.2'
     implementation 'joda-time:joda-time:2.9.9'
 
     implementation project(':dabblelibrary')

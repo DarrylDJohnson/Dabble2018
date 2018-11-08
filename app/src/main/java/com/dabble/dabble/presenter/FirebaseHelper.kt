@@ -14,12 +14,20 @@ class FirebaseHelper(val notify: (String) -> Unit) {
 
     companion object {
 
-        val EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("event")
-        val USER_REFERENCE = FirebaseDatabase.getInstance().getReference("user")
-        val EVENT_BY_USER_REFERENCE = FirebaseDatabase.getInstance().getReference("eventByUser")
+        /* structure:  PARENT_CHILD*/
 
-        const val EVENT_BY_USER = "eventByUser"
+        val EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("event")
+        val REQUESTED_EVENT_USER_REFERENCE = FirebaseDatabase.getInstance().getReference("userByRequestedEvent")
+        val CONFIRM_EVENT_USER_REFERENCE = FirebaseDatabase.getInstance().getReference("userByConfirmedEvent")
+
+        val USER_REFERENCE = FirebaseDatabase.getInstance().getReference("user")
+        val USER_EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("eventByUser")
+
+        const val USER_EVENT = "eventByUser"
         const val EVENT = "event"
+        const val USER = "user"
+        const val REQUESTED_EVENT_USER = "userByRequestedEvent"
+        const val CONFIRMED_EVENT_USER = "userByConfirmedEvent"
     }
 
     //[EVENTS]--------------------------------------------------------------------------------------
@@ -30,7 +38,7 @@ class FirebaseHelper(val notify: (String) -> Unit) {
         val photoUrl = firebaseUser.photoUrl.toString()
         val newPhotoUrl = photoUrl.replace("/s96-c/", "/s1000-c/")
 
-        val event = Event(firebaseUser.uid, oid, title, newPhotoUrl, date, guests)
+        val event = Event(firebaseUser.uid, oid, title, newPhotoUrl, date)
 
         EVENT_REFERENCE                                                                             //event
                 .child(oid)                                                                         //oid
@@ -38,7 +46,7 @@ class FirebaseHelper(val notify: (String) -> Unit) {
                 .addOnCompleteListener { pushObjectTask ->
 
                     if (pushObjectTask.isSuccessful) {                                              //[IF SUCCESSFUL]
-                        EVENT_BY_USER_REFERENCE.child(firebaseUser.uid)                             //eventByUser
+                        USER_EVENT_REFERENCE.child(firebaseUser.uid)                             //eventByUser
                                 .child(oid)                                                         //oid
                                 .setValue(oid)                                                      //oid
                                 .addOnCompleteListener { pushIdTask ->
@@ -79,7 +87,7 @@ class FirebaseHelper(val notify: (String) -> Unit) {
 
         val events = ArrayList<Event>()
 
-        pullIds(EVENT_BY_USER, firebaseUser.uid, onComplete = { eventIds ->
+        pullIds(USER_EVENT, firebaseUser.uid, onComplete = { eventIds ->
             pullRecursive(EVENT, eventIds, { events.add(it.getValue(Event::class.java)!!) }, { onComplete.invoke(events) })
         })
     }
@@ -92,7 +100,7 @@ class FirebaseHelper(val notify: (String) -> Unit) {
 
                 if (eventTask.isSuccessful) {
 
-                    EVENT_BY_USER_REFERENCE.child(event.uid).child(event.oid).removeValue().addOnCompleteListener { eventByUserTask ->
+                    USER_EVENT_REFERENCE.child(event.uid).child(event.oid).removeValue().addOnCompleteListener { eventByUserTask ->
                         if (eventByUserTask.isSuccessful) {
                             onComplete.invoke(event)
 
@@ -108,7 +116,47 @@ class FirebaseHelper(val notify: (String) -> Unit) {
         }
     }
 
-    //[EVENTS]--------------------------------------------------------------------------------------
+    //[REQUEST EVENT]-------------------------------------------------------------------------------
+    fun pushRequestForEvent(uid: String, eventId: String) {
+        REQUESTED_EVENT_USER_REFERENCE
+                .child(eventId)
+                .child(uid)
+                .setValue(uid)
+                .addOnCompleteListener {
+                    notify.invoke(it.toString())
+                }
+    }
+
+    fun pullRequestsForEvent(eventId: String, onComplete: (ArrayList<User>) -> Unit) {
+
+        val users = ArrayList<User>()
+
+        pullIds(REQUESTED_EVENT_USER, eventId, onComplete = { ids ->
+            pullRecursive(USER, ids, { users.add(it.getValue(User::class.java)!!) }, { onComplete.invoke(users) })
+        })
+    }
+
+    //[CONFIRM EVENT]-------------------------------------------------------------------------------
+    fun pushConfirmationForEvent(uid: String, eventId: String) {
+        CONFIRM_EVENT_USER_REFERENCE
+                .child(eventId)
+                .child(uid)
+                .setValue(uid)
+                .addOnCompleteListener {
+                    notify.invoke(it.toString())
+                }
+    }
+
+    fun pullConfirmationForEvent(eventId: String, onComplete: (ArrayList<User>) -> Unit) {
+
+        val users = ArrayList<User>()
+
+        pullIds(CONFIRMED_EVENT_USER, eventId, onComplete = { ids ->
+            pullRecursive(USER, ids, { users.add(it.getValue(User::class.java)!!) }, { onComplete.invoke(users) })
+        })
+    }
+
+    //[USER]----------------------------------------------------------------------------------------
     fun pushUser(name: String, photoUrl: String, onComplete: (User) -> Unit) {
 
         val uid = firebaseUser.uid
@@ -125,19 +173,19 @@ class FirebaseHelper(val notify: (String) -> Unit) {
                 }
     }
 
-    fun pullUser(vararg eventIds: String, onComplete: (ArrayList<Event>) -> Unit) {
+    fun pullUser(vararg uids: String, onComplete: (ArrayList<User>) -> Unit) {
 
-        val events = ArrayList<Event>()
+        val users = ArrayList<User>()
 
-        if (eventIds.isEmpty()) {
+        if (uids.isEmpty()) {
 
-            pullIds(EVENT_BY_USER, firebaseUser.uid, onComplete = {
-                pullRecursive(EVENT, it, { events.add(it.getValue(Event::class.java)!!) }, { onComplete.invoke(events) })
+            pullIds(USER, firebaseUser.uid, onComplete = {
+                pullRecursive(USER, it, { users.add(it.getValue(User::class.java)!!) }, { onComplete.invoke(users) })
             })
 
         } else {
 
-            pullRecursive(EVENT, ArrayList(eventIds.toList()), { events.add(it.getValue(Event::class.java)!!) }, { onComplete.invoke(events) })
+            pullRecursive(USER, ArrayList(uids.toList()), { users.add(it.getValue(User::class.java)!!) }, { onComplete.invoke(users) })
         }
     }
 
@@ -149,7 +197,7 @@ class FirebaseHelper(val notify: (String) -> Unit) {
 
                 if (it.isSuccessful) {
 
-                    EVENT_BY_USER_REFERENCE.child(event.uid).child(event.oid).removeValue().addOnCompleteListener {
+                    USER_EVENT_REFERENCE.child(event.uid).child(event.oid).removeValue().addOnCompleteListener {
                         if (it.isSuccessful) {
                             onComplete.invoke(event)
 

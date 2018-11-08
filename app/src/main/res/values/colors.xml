@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#40C4FF</color>
+    <color name="colorPrimary">#E0E0E0</color>
+    <color name="colorPrimaryDark">#263238</color>
+    <color name="colorAccent">@android:color/holo_blue_dark</color>
+    <color name="colorAccent_pressed">@android:color/holo_blue_light</color>
 
     <color name="white">#FFFFFF</color>
     <color name="gray50">#ECEFF1</color>
@@ -29,9 +30,8 @@
     <color name="transparent_gray900">#AA263238</color>
 
     <color name="bar_bg">#FFFFFF</color>
-    <color name="selector_bottom_navigation">@color/transparent_gray300</color>
 
-    <color name="toolbar_selected">@color/gray600</color>
+    <color name="toolbar_selected">@android:color/black</color>
     <color name="toolbar_unselected">@color/gray100</color>
 
     <color name="scrim">#99323232</color>

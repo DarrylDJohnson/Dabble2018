@@ -6,13 +6,12 @@ public class Event {
 
     public Event(){}
 
-    public Event(String uid, String oid, String title, String photoUrl, long date, ArrayList<String> guests){
+    public Event(String uid, String oid, String title, String photoUrl, long date){
         this.uid = uid;
         this.oid = oid;
         this.title = title;
         this.photoUrl = photoUrl;
         this.date = date;
-        this.guests = guests;
     }
 
     private String oid;
@@ -20,7 +19,6 @@ public class Event {
     private String title;
     private String photoUrl;
     private long date;
-    private ArrayList<String> guests;
 
     public String getOid() {
         return oid;
@@ -61,14 +59,4 @@ public class Event {
     public void setDate(long date) {
         this.date = date;
     }
-
-    public ArrayList<String> getGuests() {
-        return guests;
-    }
-
-    public void setGuests(ArrayList<String> guests) {
-        this.guests = guests;
-    }
-
-    /**********************************************************************************************/
 }

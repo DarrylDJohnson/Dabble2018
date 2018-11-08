@@ -91,22 +91,16 @@ public class ViewPagerToolbar extends ConstraintLayout implements View.OnClickLi
                     leftImage.setColorFilter(unselectedColor);
                     rightImage.setColorFilter(unselectedColor);
 
-                    requestLayout();
-
                 } else if (position == leftPosition) {
                     titleText.setTextColor(unselectedColor);
                     leftImage.setColorFilter(selectedColor);
                     rightImage.setColorFilter(unselectedColor);
 
-                    requestLayout();
-
                 } else if (position == rightPosition) {
                     titleText.setTextColor(unselectedColor);
                     leftImage.setColorFilter(unselectedColor);
                     rightImage.setColorFilter(selectedColor);
-
-                    requestLayout();
-                }
+                    }
             }
 
             @Override
@@ -235,8 +229,6 @@ public class ViewPagerToolbar extends ConstraintLayout implements View.OnClickLi
         if (centerPosition != -1) {
             viewPager.setCurrentItem(centerPosition);
         }
-
-        requestLayout();
     }
 
     //ON CLICK LISTENERS
