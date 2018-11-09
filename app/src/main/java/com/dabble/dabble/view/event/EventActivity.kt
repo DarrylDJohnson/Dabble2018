@@ -9,12 +9,11 @@ import com.dabble.dabble.R
 import com.dabble.dabble.adapters.EventAdapter
 import com.dabble.dabble.adapters.GuestAdapter
 import com.dabble.dabble.view.NavigationActivity
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_event.*
-import kotlinx.android.synthetic.main.navigation_activity.*
+import kotlinx.android.synthetic.main.activity_navigation.*
 import org.joda.time.DateTime
 
-class EventNavigationActivity : NavigationActivity(), View.OnClickListener {
+class EventActivity : NavigationActivity(), View.OnClickListener {
 
     private lateinit var eventAdapter: EventAdapter
     private lateinit var guestAdapter: GuestAdapter
@@ -36,9 +35,14 @@ class EventNavigationActivity : NavigationActivity(), View.OnClickListener {
 
             /* add event */
             R.id.toolbar_right -> {
-                firebaseHelper.pushEvent(null, "Networking Event", DateTime.now().millis, ArrayList(), onComplete = {
-                    updateEvents()
-                })
+
+                addFragment(
+                        EventDialog().newInstance(null, callback = { title ->
+                            firebaseHelper.pushEvent(null, title, DateTime.now().millis, ArrayList(), onComplete = { event ->
+                                updateEvents()
+                            })
+                        })
+                )
             }
 
             /* request event */
@@ -99,7 +103,7 @@ class EventNavigationActivity : NavigationActivity(), View.OnClickListener {
 
             eventAdapter.setData(events)
 
-            if(events.size == 0){
+            if (events.size == 0) {
                 mb_request.visibility = View.INVISIBLE
             } else {
                 mb_request.visibility = View.VISIBLE

@@ -18,8 +18,8 @@
             </intent-filter>
 
         </activity>
-        <activity android:name=".view.event.EventNavigationActivity" android:launchMode="singleTask"/>
-        <activity android:name=".view.profile.ProfileNavigationActivity" />
+        <activity android:name=".view.event.EventActivity" android:launchMode="singleTask"/>
+        <activity android:name=".view.profile.ProfileActivity" />
     </application>
 
 </manifest>

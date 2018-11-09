@@ -18,7 +18,9 @@ class FirebaseHelper(val notify: (String) -> Unit) {
 
         val EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("event")
         val REQUESTED_EVENT_USER_REFERENCE = FirebaseDatabase.getInstance().getReference("userByRequestedEvent")
-        val CONFIRM_EVENT_USER_REFERENCE = FirebaseDatabase.getInstance().getReference("userByConfirmedEvent")
+        val USER_REQUESTED_EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("requestedEventByUser")
+        val CONFIRMED_EVENT_USER_REFERENCE = FirebaseDatabase.getInstance().getReference("userByConfirmedEvent")
+        val USER_CONFIRMED_EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("confirmedEventByUser")
 
         val USER_REFERENCE = FirebaseDatabase.getInstance().getReference("user")
         val USER_EVENT_REFERENCE = FirebaseDatabase.getInstance().getReference("eventByUser")
@@ -27,7 +29,9 @@ class FirebaseHelper(val notify: (String) -> Unit) {
         const val EVENT = "event"
         const val USER = "user"
         const val REQUESTED_EVENT_USER = "userByRequestedEvent"
+        const val USER_REQUESTED_EVENT = "requestedEventByUser"
         const val CONFIRMED_EVENT_USER = "userByConfirmedEvent"
+        const val USER_CONFIRMED_EVENT = "confirmedEventByUser"
     }
 
     //[EVENTS]--------------------------------------------------------------------------------------
@@ -122,8 +126,17 @@ class FirebaseHelper(val notify: (String) -> Unit) {
                 .child(eventId)
                 .child(uid)
                 .setValue(uid)
-                .addOnCompleteListener {
-                    notify.invoke(it.toString())
+                .addOnCompleteListener { outerTask ->
+
+                    USER_REQUESTED_EVENT_REFERENCE
+                            .child(uid)
+                            .child(eventId)
+                            .setValue(eventId)
+                            .addOnCompleteListener { innerTask ->
+                                notify.invoke(innerTask.toString())
+                            }
+
+                    notify.invoke(outerTask.toString())
                 }
     }
 
@@ -136,14 +149,32 @@ class FirebaseHelper(val notify: (String) -> Unit) {
         })
     }
 
+    fun pullMyRequestedEvents(onComplete: (ArrayList<Event>) -> Unit) {
+
+        val events = ArrayList<Event>()
+
+        pullIds(USER_REQUESTED_EVENT, firebaseUser.uid, onComplete = { eventIds ->
+            pullRecursive(EVENT, eventIds, { events.add(it.getValue(Event::class.java)!!) }, { onComplete.invoke(events) })
+        })
+    }
+
     //[CONFIRM EVENT]-------------------------------------------------------------------------------
     fun pushConfirmationForEvent(uid: String, eventId: String) {
-        CONFIRM_EVENT_USER_REFERENCE
+        CONFIRMED_EVENT_USER_REFERENCE
                 .child(eventId)
                 .child(uid)
                 .setValue(uid)
-                .addOnCompleteListener {
-                    notify.invoke(it.toString())
+                .addOnCompleteListener { outerTask ->
+
+                    USER_CONFIRMED_EVENT_REFERENCE
+                            .child(uid)
+                            .child(eventId)
+                            .setValue(eventId)
+                            .addOnCompleteListener { innerTask ->
+                                notify.invoke(innerTask.toString())
+                            }
+
+                    notify.invoke(outerTask.toString())
                 }
     }
 
@@ -153,6 +184,15 @@ class FirebaseHelper(val notify: (String) -> Unit) {
 
         pullIds(CONFIRMED_EVENT_USER, eventId, onComplete = { ids ->
             pullRecursive(USER, ids, { users.add(it.getValue(User::class.java)!!) }, { onComplete.invoke(users) })
+        })
+    }
+
+    fun pullMyConfirmedEvents(onComplete: (ArrayList<Event>) -> Unit) {
+
+        val events = ArrayList<Event>()
+
+        pullIds(USER_CONFIRMED_EVENT, firebaseUser.uid, onComplete = { eventIds ->
+            pullRecursive(EVENT, eventIds, { events.add(it.getValue(Event::class.java)!!) }, { onComplete.invoke(events) })
         })
     }
 

@@ -4,16 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.Snackbar
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import com.dabble.dabble.R
 import com.dabble.dabble.presenter.FirebaseHelper
-import com.dabble.dabble.view.event.EventNavigationActivity
-import com.dabble.dabble.view.profile.ProfileNavigationActivity
+import com.dabble.dabble.view.event.EventActivity
+import com.dabble.dabble.view.profile.ProfileActivity
 import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.navigation_activity.*
+import kotlinx.android.synthetic.main.activity_navigation.*
 import kotterknife.bindView
 
 abstract class NavigationActivity : AppCompatActivity() {
@@ -29,7 +30,7 @@ abstract class NavigationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.navigation_activity)
+        setContentView(R.layout.activity_navigation)
 
         /* keyboard listener */
         navigation_activity.viewTreeObserver.addOnGlobalLayoutListener {
@@ -88,12 +89,12 @@ abstract class NavigationActivity : AppCompatActivity() {
 
             when {
                 it.itemId == R.id.menu_event && position != 0 -> {
-                    val intent = Intent(this, EventNavigationActivity::class.java)
+                    val intent = Intent(this, EventActivity::class.java)
                     this.startActivity(intent)//activityNumber = 0
                 }
 
                 it.itemId == R.id.menu_profile && position != 1 -> {
-                    val intent = Intent(this, ProfileNavigationActivity::class.java)
+                    val intent = Intent(this, ProfileActivity::class.java)
                     this.startActivity(intent)//activityNumber = 1
                 }
             }
@@ -102,6 +103,10 @@ abstract class NavigationActivity : AppCompatActivity() {
 
             false
         }
+    }
+
+    fun addFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().add(R.id.navigation_activity, fragment, null).commit()
     }
 
     abstract fun onCreateNavigationActivity(view: View)

@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.View
 import com.dabble.dabble.R
 import com.dabble.dabble.presenter.SignInPresenter
-import com.dabble.dabble.view.event.EventNavigationActivity
+import com.dabble.dabble.view.event.EventActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -134,7 +134,7 @@ class GoogleSignInActivity : AppCompatActivity(), View.OnClickListener {
                     .addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                             super.onDismissed(transientBottomBar, event)
-                            val intent = Intent(baseContext, EventNavigationActivity::class.java)
+                            val intent = Intent(baseContext, EventActivity::class.java)
                             startActivity(intent)
                             finish()
                         }
