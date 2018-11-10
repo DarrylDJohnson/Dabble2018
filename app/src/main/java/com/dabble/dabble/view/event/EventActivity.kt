@@ -1,22 +1,27 @@
 package com.dabble.dabble.view.event
 
+import android.graphics.Color
 import android.support.design.widget.Snackbar
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.dabble.dabble.R
 import com.dabble.dabble.adapters.EventAdapter
 import com.dabble.dabble.adapters.GuestAdapter
+import com.dabble.dabble.models.Event
 import com.dabble.dabble.view.NavigationActivity
-import kotlinx.android.synthetic.main.fragment_event.*
 import kotlinx.android.synthetic.main.activity_navigation.*
+import kotlinx.android.synthetic.main.fragment_event.*
 import org.joda.time.DateTime
 
-class EventActivity : NavigationActivity(), View.OnClickListener {
+class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var eventAdapter: EventAdapter
     private lateinit var guestAdapter: GuestAdapter
+
+    val requestedEvents = ArrayList<String>()
 
     override var position = 0
 
@@ -36,25 +41,11 @@ class EventActivity : NavigationActivity(), View.OnClickListener {
             /* add event */
             R.id.toolbar_right -> {
 
-                addFragment(
-                        EventDialog().newInstance(null, callback = { title ->
-                            firebaseHelper.pushEvent(null, title, DateTime.now().millis, ArrayList(), onComplete = { event ->
-                                updateEvents()
-                            })
-                        })
-                )
-            }
-
-            /* request event */
-            R.id.mb_request -> {
-
-                if (recycler_event.currentItem != -1) {
-                    firebaseHelper.pushRequestForEvent(currentUser.uid, eventAdapter.events[recycler_event.currentItem].oid)
-
-                    updateGuests()
-                }
-
-                Snackbar.make(container, "requested", Snackbar.LENGTH_SHORT).show()
+                addFragment(EventDialog().newInstance(null, callback = { title ->
+                    firebaseHelper.pushEvent(null, title, DateTime.now().millis, ArrayList(), onComplete = { event ->
+                        updateEvents()
+                    })
+                }))
             }
         }
     }
@@ -65,17 +56,32 @@ class EventActivity : NavigationActivity(), View.OnClickListener {
         toolbar_right.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_add))
         toolbar_right.setOnClickListener(this)
 
-        /* Material Button */
-        mb_request.setOnClickListener(this)
+        /* RecyclerView - Event */
+        eventAdapter = EventAdapter(ArrayList(), requestedEvents, onRequest = { requestedEvent ->
 
-        /* Discrete Scroll View - Event */
-        eventAdapter = EventAdapter(ArrayList())
+            Snackbar.make(navigation_activity, "requested", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", {})
+                    .setActionTextColor(Color.YELLOW)
+                    .addCallback(object: Snackbar.Callback(){
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            if(event != DISMISS_EVENT_ACTION){
+                                firebaseHelper.pushRequestForEvent(currentUser.uid, requestedEvent)
+                                requestedEvents.add(requestedEvent)
+                                eventAdapter.notifyItemChanged(recycler_event.currentItem)
+                                updateGuests()
+                            }
+                        }
+                    }).show()
+        })
         recycler_event.adapter = eventAdapter
 
         /* RecyclerView - Guests */
         recycler_guest.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
         guestAdapter = GuestAdapter(ArrayList())
         recycler_guest.adapter = guestAdapter
+
+        /* SwipeToRefresh - Event */
+        swipe_refresh_event.setOnRefreshListener(this)
 
         /* Event - ScrollListener */
         recycler_event.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -85,7 +91,6 @@ class EventActivity : NavigationActivity(), View.OnClickListener {
                 when (newState) {
 
                     RecyclerView.SCROLL_STATE_IDLE -> {
-
                         updateGuests()
                     }
 
@@ -101,18 +106,14 @@ class EventActivity : NavigationActivity(), View.OnClickListener {
     fun updateEvents() {
         firebaseHelper.pullEvent(onComplete = { events ->
 
-            eventAdapter.setData(events)
+            firebaseHelper.pullMyRequestedEventIds {
 
-            if (events.size == 0) {
-                mb_request.visibility = View.INVISIBLE
-            } else {
-                mb_request.visibility = View.VISIBLE
+                eventAdapter.setData(events, it)
+
+                swipe_refresh_event.isRefreshing = false
+
+                updateGuests()
             }
-
-            recycler_event.visibility = View.VISIBLE
-            recycler_event_progress.visibility = View.INVISIBLE
-
-            updateGuests()
         })
     }
 
@@ -126,5 +127,9 @@ class EventActivity : NavigationActivity(), View.OnClickListener {
                 recycler_guest.visibility = View.VISIBLE
                 recycler_guest_progress.visibility = View.INVISIBLE
             })
+    }
+
+    override fun onRefresh() {
+        updateEvents()
     }
 }

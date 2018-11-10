@@ -6,4 +6,6 @@
     <string name="title">title</string>
     <string name="cancel">cancel</string>
     <string name="confirm">confirm</string>
+    <string name="request_event_button">request event button</string>
+    <string name="event_host_image">event host image</string>
 </resources>

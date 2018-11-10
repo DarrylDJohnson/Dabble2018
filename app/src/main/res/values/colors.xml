@@ -23,6 +23,7 @@
     <color name="gray700">#455A64</color>
     <color name="gray800">#37474F</color>
     <color name="gray900">#263238</color>
+    <color name="black">#000000</color>
 
     <color name="transparent_white">#AAFFFFFF</color>
     <color name="transparent_gray50">#AAECEFF1</color>

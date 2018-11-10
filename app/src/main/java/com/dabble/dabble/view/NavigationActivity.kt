@@ -44,14 +44,11 @@ abstract class NavigationActivity : AppCompatActivity() {
         initNavigation(position)
 
         /* inflate "fragment"*/
-
         val child = layoutInflater.inflate(innerViewResId, container, false)
 
         container.addView(child)
 
         onCreateNavigationActivity(child)
-        //val innerView = LayoutInflater.from(this).inflate(innerViewResId, container, false)
-
     }
 
     override fun onBackPressed() {

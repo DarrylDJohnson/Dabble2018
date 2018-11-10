@@ -3,6 +3,7 @@ package com.dabble.dabble.view.event
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,6 +21,8 @@ import java.io.Serializable
 class EventFragment : Fragment() {
 
     lateinit var firebaseHelper: FirebaseHelper
+    val events = ArrayList<Event>()
+    val adapter = MyEventsAdapter(events)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.recycler_view, container, false)
@@ -45,30 +48,14 @@ class EventFragment : Fragment() {
 
     fun init(type: String, callback: () -> Unit) {
 
-        val events = ArrayList<Event>()
-
-        val adapter = MyEventsAdapter(ArrayList())
-
         recycler_view.layoutManager = LinearLayoutManager(context, LinearLayout.VERTICAL, false)
 
         recycler_view.adapter = adapter
 
-        when (type) {
-            "my" -> firebaseHelper.pullMyEvents {
-                events.addAll(it)
-                adapter.events.addAll(events)
-                adapter.notifyDataSetChanged()
-            }
-            "requested" -> firebaseHelper.pullMyRequestedEvents {
-                events.addAll(it)
-                adapter.events.addAll(events)
-                adapter.notifyDataSetChanged()
-            }
-            "confirmed" -> firebaseHelper.pullMyConfirmedEvents {
-                events.addAll(it)
-                adapter.events.addAll(events)
-                adapter.notifyDataSetChanged()
-            }
+        updateEvents(type)
+
+        swipe_refresh.setOnRefreshListener{
+            updateEvents(type)
         }
     }
 
@@ -83,5 +70,28 @@ class EventFragment : Fragment() {
         fragment.arguments = bundle
 
         return fragment
+    }
+
+    fun updateEvents(type: String){
+
+        events.clear()
+
+        when (type) {
+            "my" -> firebaseHelper.pullMyEvents {
+                events.addAll(it)
+                adapter.notifyDataSetChanged()
+                swipe_refresh.isRefreshing = false
+            }
+            "requested" -> firebaseHelper.pullMyRequestedEvents {
+                events.addAll(it)
+                adapter.notifyDataSetChanged()
+                swipe_refresh.isRefreshing = false
+            }
+            "confirmed" -> firebaseHelper.pullMyConfirmedEvents {
+                events.addAll(it)
+                adapter.notifyDataSetChanged()
+                swipe_refresh.isRefreshing = false
+            }
+        }
     }
 }

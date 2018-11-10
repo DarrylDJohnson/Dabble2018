@@ -158,6 +158,11 @@ class FirebaseHelper(val notify: (String) -> Unit) {
         })
     }
 
+    fun pullMyRequestedEventIds(onComplete: (ArrayList<String>) -> Unit) {
+
+        pullIds(USER_REQUESTED_EVENT, firebaseUser.uid, onComplete = { onComplete.invoke(it)})
+    }
+
     //[CONFIRM EVENT]-------------------------------------------------------------------------------
     fun pushConfirmationForEvent(uid: String, eventId: String) {
         CONFIRMED_EVENT_USER_REFERENCE
