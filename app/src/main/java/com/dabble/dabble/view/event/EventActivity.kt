@@ -10,7 +10,6 @@ import android.view.View
 import com.dabble.dabble.R
 import com.dabble.dabble.adapters.EventAdapter
 import com.dabble.dabble.adapters.GuestAdapter
-import com.dabble.dabble.models.Event
 import com.dabble.dabble.view.NavigationActivity
 import kotlinx.android.synthetic.main.activity_navigation.*
 import kotlinx.android.synthetic.main.fragment_event.*
@@ -38,8 +37,11 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
 
         when (v?.id) {
 
-            /* add event */
-            R.id.toolbar_right -> {
+            /* search event */
+            R.id.toolbar_right -> {}
+
+            /* create event */
+            R.id.event_create -> {
 
                 addFragment(EventDialog().newInstance(null, callback = { title ->
                     firebaseHelper.pushEvent(null, title, DateTime.now().millis, ArrayList(), onComplete = { event ->
@@ -53,8 +55,9 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
     fun init() {
         /* Toolbar */
         toolbar.text = "dabble"
-        toolbar_right.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_add))
+        toolbar_right.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_search))
         toolbar_right.setOnClickListener(this)
+        event_create.setOnClickListener(this)
 
         /* RecyclerView - Event */
         eventAdapter = EventAdapter(ArrayList(), requestedEvents, onRequest = { requestedEvent ->

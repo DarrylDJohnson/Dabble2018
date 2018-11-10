@@ -31,10 +31,9 @@
     <TextView
         android:id="@+id/toolbar"
         android:layout_width="0dp"
-        android:layout_height="52dp"
+        android:layout_height="48dp"
         android:gravity="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-        android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@id/toolbar_right"
         app:layout_constraintStart_toEndOf="@id/toolbar_left"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,7 +52,7 @@
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:background="@android:color/transparent"
         app:itemIconTint="@color/nav_item_color_state"
         app:itemTextColor="@color/nav_item_color_state"

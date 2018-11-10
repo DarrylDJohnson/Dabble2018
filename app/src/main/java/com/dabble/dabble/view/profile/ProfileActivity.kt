@@ -20,11 +20,8 @@ class ProfileActivity : NavigationActivity() {
         toolbar.text = currentUser.displayName
 
         firebaseHelper.pullUser(currentUser.uid, onComplete = {
-
-            if (it[0] != null) {
                 GlideUtil.loadImage(it[0].photoUrl, profile_picture)
                 profile_name.text = it[0].name
-            }
         })
 
         viewpager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
