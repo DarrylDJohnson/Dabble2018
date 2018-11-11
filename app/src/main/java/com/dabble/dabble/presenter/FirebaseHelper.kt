@@ -35,7 +35,7 @@ class FirebaseHelper(val notify: (String) -> Unit) {
     }
 
     //[EVENTS]--------------------------------------------------------------------------------------
-    fun pushEvent(eventId: String?, title: String, date: Long, guests: ArrayList<String>, onComplete: (Event) -> Unit) {
+    fun pushEvent(eventId: String?, title: String, date: Long, onComplete: (Event) -> Unit) {
 
         val oid = eventId ?: EVENT_REFERENCE.push().key!!
 

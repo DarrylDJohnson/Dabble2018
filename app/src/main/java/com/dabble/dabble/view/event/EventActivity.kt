@@ -44,7 +44,7 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
             R.id.event_create -> {
 
                 addFragment(EventDialog().newInstance(null, callback = { title ->
-                    firebaseHelper.pushEvent(null, title, DateTime.now().millis, ArrayList(), onComplete = { event ->
+                    firebaseHelper.pushEvent(null, title, DateTime.now().millis, onComplete = { event ->
                         updateEvents()
                     })
                 }))

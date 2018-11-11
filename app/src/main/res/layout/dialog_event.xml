@@ -1,59 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="280dp"
-    android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:clickable="true">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <ImageView
-        android:id="@+id/dialog_event_header"
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:background="@color/colorAccent"
-        android:padding="16dp"
-        android:src="@drawable/ic_edit"
-        android:tint="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:background="@color/white"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants"
+        android:scrollbars="vertical">
 
-    <TextView
-        android:id="@+id/dialog_event_title"
-        style="@style/DialogItem"
-        android:text="@string/title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_event_header" />
+        <ImageView
+            android:id="@+id/dialog_event_header"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:background="@color/colorAccent"
+            android:padding="16dp"
+            android:src="@drawable/ic_edit"
+            android:tint="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/dialog_event_edit_text"
-        style="@style/DialogItem"
-        android:layout_width="0dp"
-        android:imeOptions="actionDone"
-        android:inputType="text"
-        android:maxLines="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/dialog_event_title" />
+        <TextView
+            android:id="@+id/dialog_event_title"
+            style="@style/DialogItem"
+            android:text="@string/title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_event_header" />
 
-    <TextView
-        android:id="@+id/dialog_event_cancel"
-        style="@style/DialogItem"
-        android:text="@string/cancel"
-        android:textColor="@color/gray400"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/dialog_event_confirm"
-        app:layout_constraintTop_toBottomOf="@id/dialog_event_edit_text" />
+        <EditText
+            android:id="@+id/dialog_event_edit_text"
+            style="@style/DialogItem"
+            android:layout_width="0dp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLines="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_event_title" />
 
-    <TextView
-        android:id="@+id/dialog_event_confirm"
-        style="@style/DialogItem"
-        android:text="@string/confirm"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintTop_toBottomOf="@id/dialog_event_edit_text" />
+        <com.dabble.dabblelibrary.datetimepicker.DateTimePicker
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_event_edit_text" />
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/dialog_event_cancel"
+            style="@style/DialogItem"
+            android:text="@string/cancel"
+            android:textColor="@color/gray400"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/dialog_event_confirm" />
+
+        <TextView
+            android:id="@+id/dialog_event_confirm"
+            style="@style/DialogItem"
+            android:text="@string/confirm"
+            android:textColor="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

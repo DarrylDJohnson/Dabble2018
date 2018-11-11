@@ -4,5 +4,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/item_guest"
     android:layout_width="48dp"
+    android:elevation="4dp"
     android:layout_height="48dp"
     android:layout_margin="8dp"/>
