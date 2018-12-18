@@ -1,6 +1,7 @@
 package com.dabble.dabble.adapters
 
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.TextViewCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -41,8 +42,11 @@ class EventAdapter(val events: ArrayList<Event>, val requestedEvents: ArrayList<
             GlideUtil.loadImage(event.photoUrl, event_image)
 
             event_title.text = event.title
+            event_date.text = DateTime.now().toString("d")
+            event_month.text = DateTime.now().toString("MMM")
 
-            event_date.text = DateTime.now().toString("MMMM d, YYYY")
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(event_date, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(event_month, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
 
             item_event.clipToOutline = true
 

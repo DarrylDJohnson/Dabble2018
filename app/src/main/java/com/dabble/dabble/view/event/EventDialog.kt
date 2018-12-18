@@ -5,16 +5,16 @@ import android.util.Log
 import android.view.View
 import com.dabble.dabble.R
 import com.dabble.dabble.view.BaseDialog
-import kotlinx.android.synthetic.main.dialog_event.*
+import kotlinx.android.synthetic.main.dialog_create_event.*
 import java.io.Serializable
 
 
 class EventDialog : BaseDialog() {
-    override val dialogId = R.layout.dialog_event
+    override val dialogId = R.layout.dialog_create_event
 
     override fun onDialogCreated(view: View, savedInstanceState: Bundle?) {
 
-        dialog_event_cancel.setOnClickListener { close.invoke() }
+        event_create_cancel.setOnClickListener { close.invoke() }
 
         @Suppress("UNCHECKED_CAST")
         try {
@@ -22,11 +22,11 @@ class EventDialog : BaseDialog() {
             val callback: (String) -> Unit = arguments?.getSerializable("callback") as (String) -> Unit
 
             if (title != null) {
-                dialog_event_edit_text.setText(title)
+                event_create_name.setText(title)
             }
 
-            dialog_event_confirm.setOnClickListener({
-                callback.invoke(dialog_event_edit_text.text.toString())
+            event_create_confirm.setOnClickListener({
+                callback.invoke(event_create_name.text.toString())
                 close.invoke()
             })
 

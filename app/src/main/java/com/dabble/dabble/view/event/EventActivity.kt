@@ -28,6 +28,8 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
 
     override fun onCreateNavigationActivity(view: View) {
 
+        println("EventActivity: onCreateNavigationActivity")
+
         init()
 
         updateEvents()
@@ -38,7 +40,8 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
         when (v?.id) {
 
             /* search event */
-            R.id.toolbar_right -> {}
+            R.id.toolbar_right -> {
+            }
 
             /* create event */
             R.id.event_create -> {
@@ -53,6 +56,9 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
     fun init() {
+
+        System.out.println("EventActivity: init")
+
         /* Toolbar */
         toolbar.text = "dabble"
         toolbar_right.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_search))
@@ -65,9 +71,9 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
             Snackbar.make(navigation_activity, "requested", Snackbar.LENGTH_LONG)
                     .setAction("UNDO", {})
                     .setActionTextColor(Color.YELLOW)
-                    .addCallback(object: Snackbar.Callback(){
+                    .addCallback(object : Snackbar.Callback() {
                         override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            if(event != DISMISS_EVENT_ACTION){
+                            if (event != DISMISS_EVENT_ACTION) {
                                 firebaseHelper.pushRequestForEvent(currentUser.uid, requestedEvent)
                                 requestedEvents.add(requestedEvent)
                                 eventAdapter.notifyItemChanged(recycler_event.currentItem)
@@ -79,7 +85,7 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
         recycler_event.adapter = eventAdapter
 
         /* RecyclerView - Guests */
-        recycler_guest.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.HORIZONTAL, false)
+        recycler_guest.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         guestAdapter = GuestAdapter(ArrayList())
         recycler_guest.adapter = guestAdapter
 
@@ -107,9 +113,14 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
     fun updateEvents() {
+
         firebaseHelper.pullEvent(onComplete = { events ->
 
+            println("EventActivity: pullEvent")
+
             firebaseHelper.pullMyRequestedEventIds {
+
+                System.out.println("EventActivity: pullMyRequestedEvents")
 
                 eventAdapter.setData(events, it)
 
@@ -121,7 +132,11 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
     }
 
     fun updateGuests() {
-        if (recycler_event.currentItem != -1)
+
+        if (recycler_event.currentItem == -1) {
+            System.out.println("EventActivity: current item: ${recycler_event.currentItem}")
+        } else {
+
             firebaseHelper.pullRequestsForEvent(eventAdapter.events[recycler_event.currentItem].oid, onComplete = {
                 guestAdapter.guests.clear()
                 guestAdapter.guests.addAll(it)
@@ -130,6 +145,7 @@ class EventActivity : NavigationActivity(), View.OnClickListener, SwipeRefreshLa
                 recycler_guest.visibility = View.VISIBLE
                 recycler_guest_progress.visibility = View.INVISIBLE
             })
+        }
     }
 
     override fun onRefresh() {
